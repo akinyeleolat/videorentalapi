@@ -27,15 +27,14 @@ public class UserController {
     }
 
     @PostMapping("/signup")
-    public ResponseEntity<Object> createUser(@Valid @RequestBody User user) throws DuplicateResourceException{
-        String username = user.getUsername();
-        String password = user.getPassword();
-        user.setUsername(username);
-        user.setPassword(password);
-        User  existingUser = userService.findByUsername(user.getUsername());
-        if(existingUser == null){
-            return ResponseEntity.status(HttpStatus.CREATED).body(userService.saveUser(username, password));
+    public ResponseEntity<Object> createUser(@Valid @RequestBody User userInput) throws DuplicateResourceException{
+        User newUser = new User();
+        newUser.setUsername(userInput.getUsername());
+        newUser.setPassword( userInput.getPassword());
+        User  existingUser = userService.findByUsername(newUser.getUsername());
+        if(existingUser != null){
+            throw new DuplicateResourceException("user with"+newUser.getUsername()+"already exist");
         }
-        throw new DuplicateResourceException("user with"+username+"already exist");
+        return ResponseEntity.status(HttpStatus.CREATED).body(userService.saveUser(newUser.getUsername(),newUser.getPassword()));
     }
 }
