@@ -22,9 +22,9 @@ public class MyUserDetailsService implements UserDetailsService{
     @Transactional(readOnly = true)
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 
-        User user = userService.findUserByUserName(username);
+        User user = userService.findByUsername(username);
 
-        if (user.getUsername() == null) {
+        if (null == user.getUsername()) {
             throw new UsernameNotFoundException(username);
         }
 
