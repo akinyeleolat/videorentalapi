@@ -5,24 +5,26 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collections;
 
 @Component
-public class UserDetailsServiceImpl implements UserDetailsService{
+public class MyUserDetailsService implements UserDetailsService{
 
     private UserService userService;
 
-    public UserDetailsServiceImpl(UserService userService) {
+    public MyUserDetailsService(UserService userService) {
         this.userService=userService;
     }
 
     @Override
+    @Transactional(readOnly = true)
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 
-        User user = userService.findByUsername(username);
+        User user = userService.findUserByUserName(username);
 
-        if(user == null) {
+        if (user.getUsername() == null) {
             throw new UsernameNotFoundException(username);
         }
 
