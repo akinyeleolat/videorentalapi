@@ -1,15 +1,12 @@
 package com.videorentalapi.service.controllers;
 
 import com.videorentalapi.service.models.User;
-import com.videorentalapi.service.services.*;
+import com.videorentalapi.service.services.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import com.videorentalapi.service.exception.DuplicateResourceException;
 
 import javax.validation.Valid;
@@ -27,13 +24,14 @@ public class UserController {
     }
 
     @PostMapping("/signup")
+    @ResponseBody
     public ResponseEntity<Object> createUser(@Valid @RequestBody User userInput) throws DuplicateResourceException{
         User newUser = new User();
         newUser.setUsername(userInput.getUsername());
         newUser.setPassword( userInput.getPassword());
         User  existingUser = userService.findByUsername(newUser.getUsername());
         if(existingUser != null){
-            throw new DuplicateResourceException("user with"+newUser.getUsername()+"already exist");
+            throw new DuplicateResourceException("user with "+newUser.getUsername()+" already exist");
         }
         return ResponseEntity.status(HttpStatus.CREATED).body(userService.saveUser(newUser.getUsername(),newUser.getPassword()));
     }

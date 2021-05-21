@@ -12,7 +12,7 @@ public interface UserService {
      * @param username
      * @param password
      */
-    public String saveUser(String username, String password);
+    public User saveUser(String username, String password);
 
     /**
      * find user by username

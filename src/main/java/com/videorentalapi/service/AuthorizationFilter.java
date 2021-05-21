@@ -40,7 +40,7 @@ private UsernamePasswordAuthenticationToken getAuthentication(HttpServletRequest
 
         String token = request.getHeader("Authorization");
         if(token != null){
-        String user = Jwts.parser().setSigningKey(jwtSecret.getBytes())
+        String user = Jwts.parser().setSigningKey("SecretKeyToGenJWTs".getBytes())
         .parseClaimsJws(token.replace("Bearer",""))
         .getBody()
 

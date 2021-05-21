@@ -4,6 +4,7 @@ package com.videorentalapi.service.services;
 import com.videorentalapi.service.models.User;
 import com.videorentalapi.service.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -15,23 +16,23 @@ public class UserServiceImpl implements UserService {
 
     private BCryptPasswordEncoder bCryptPasswordEncoder;
 
+    @Autowired
     private UserRepository userRepository;
 
 
     public UserServiceImpl(BCryptPasswordEncoder bCryptPasswordEncoder, UserRepository userRepository) {
         this.bCryptPasswordEncoder=bCryptPasswordEncoder;
-        this.userRepository = userRepository;
+//        this.userRepository = userRepository;
     }
 
     @Override
-    public String saveUser(String username, String password) {
+    public User saveUser(String username, String password) {
 
         User user = new User();
 
         user.setUsername(username);
-        user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
-        userRepository.save(user);
-        return user.toString();
+        user.setPassword(bCryptPasswordEncoder.encode(password));
+        return userRepository.save(user);
     }
 
     @Override
