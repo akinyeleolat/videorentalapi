@@ -39,19 +39,7 @@ public class UserServiceImpl implements UserService {
         User user = new User();
         user.setUsername(username);
         Optional<User> userDetails=userRepository.findByUsername(user.getUsername());
-        if(!userDetails.isPresent()){
-            return null;
-        }
-        User currentUser = new User();
-        userDetails.ifPresent(current -> {
-            currentUser.setUsername(current.getUsername());
-            currentUser.setPassword(current.getPassword());
-            currentUser.setId(current.getId());
-            currentUser.setCreatedAt(current.getCreatedAt());
-            currentUser.setUpdatedAt(current.getUpdatedAt());
-        });
-
-        return currentUser;
+        return userDetails.orElse(null);
     }
 
 }
