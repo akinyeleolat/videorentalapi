@@ -2,7 +2,6 @@ package com.videorentalapi.service.controllers;
 
 import com.videorentalapi.service.models.User;
 import com.videorentalapi.service.services.UserService;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,7 +13,6 @@ import javax.validation.Valid;
 @RestController
 @RequestMapping(value = "/api/v1/users")
 @Slf4j
-@RequiredArgsConstructor
 public class UserController {
 
     private UserService userService;
