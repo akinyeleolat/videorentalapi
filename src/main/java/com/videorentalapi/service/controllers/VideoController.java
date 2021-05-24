@@ -1,5 +1,6 @@
 package com.videorentalapi.service.controllers;
 
+import com.videorentalapi.service.dto.VideoDTO;
 import com.videorentalapi.service.exception.DuplicateResourceException;
 import com.videorentalapi.service.exception.ResourceNotFoundException;
 import com.videorentalapi.service.models.User;
@@ -48,16 +49,23 @@ public class VideoController {
      * @return the list
      */
     @GetMapping("/video")
-    public Page<Video> getAllVideo(Pageable page) throws ResourceNotFoundException {
+    public ResponseEntity<?> getAllVideo(Pageable page) throws ResourceNotFoundException {
 
         Page<Video> videoList = videoService.VideoList(page);
 
         if(videoList.isEmpty()){
             throw new ResourceNotFoundException("Video list is empty");
         }
-        //TODO: handle showing logged in user.
+        User currentUser = securityService.getUser();
 
-        return videoList;
+        VideoDTO videoDetails = new VideoDTO();
+
+        videoDetails.setCurrentUser(currentUser);
+        videoDetails.setVideo(videoList);
+
+
+
+        return ResponseEntity.status(HttpStatus.OK).body(videoDetails);
     }
 
 
@@ -74,7 +82,6 @@ public class VideoController {
         if(existingVideo != null){
             throw new DuplicateResourceException("video "+newVideo.getVideoTitle()+" already exist.");
         }
-        //TODO: handle required field for specifics
         return ResponseEntity.status(HttpStatus.CREATED).body(videoService.saveVideo(newVideo));
     }
 
