@@ -2,7 +2,11 @@ package com.videorentalapi.service.controllers;
 
 import com.videorentalapi.service.exception.DuplicateResourceException;
 import com.videorentalapi.service.exception.ResourceNotFoundException;
+import com.videorentalapi.service.models.User;
 import com.videorentalapi.service.models.Video;
+import com.videorentalapi.service.models.VideoRental;
+import com.videorentalapi.service.security.SecurityService;
+import com.videorentalapi.service.services.VideoRentService;
 import com.videorentalapi.service.services.VideoService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -23,10 +27,18 @@ public class VideoController {
 
     private VideoService videoService;
 
+
+    private SecurityService securityService;
+
+
+    private VideoRentService videoRentService;
+
     private Integer videoId;
 
-    public VideoController(VideoService videoService) {
+    public VideoController(VideoService videoService,SecurityService securityService,VideoRentService videoRentService) {
         this.videoService=videoService;
+        this.securityService=securityService;
+        this.videoRentService=videoRentService;
     }
 
 
@@ -46,7 +58,6 @@ public class VideoController {
         //TODO: handle showing logged in user.
 
         return videoList;
-
     }
 
 
@@ -66,4 +77,17 @@ public class VideoController {
         //TODO: handle required field for specifics
         return ResponseEntity.status(HttpStatus.CREATED).body(videoService.saveVideo(newVideo));
     }
+
+
+    @PostMapping("/rent")
+    public ResponseEntity<VideoRental> rentVideo(@Valid @RequestBody  VideoRental videoRentInput){
+        User currentUser = securityService.getUser();
+        double rentalPrice = videoRentService.processVideoRentalPrice(videoRentInput);
+        VideoRental rentedVideo = videoRentService.saveRentalInfo((int) currentUser.getId(),videoRentInput.getVideoId(),currentUser.getUsername(), rentalPrice,videoRentInput.getNumOfDays());
+        return ResponseEntity.status(HttpStatus.CREATED).body(rentedVideo);
+    }
+
+
+
+
 }
