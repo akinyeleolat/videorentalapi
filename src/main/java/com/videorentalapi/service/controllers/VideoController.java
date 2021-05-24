@@ -88,6 +88,19 @@ public class VideoController {
     }
 
 
+    @GetMapping("/rent")
+    public Page<VideoRental> getRentHistory(Pageable page) throws ResourceNotFoundException {
+
+        Page<VideoRental> rentHistory = videoRentService.VideoRentList(page);
+
+        if(rentHistory.isEmpty()){
+            throw new ResourceNotFoundException("Video list is empty");
+        }
+
+        return rentHistory;
+    }
+
+
 
 
 }
