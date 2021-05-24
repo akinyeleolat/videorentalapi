@@ -14,5 +14,5 @@ import java.util.Optional;
  */
 @Repository
 public interface VideoUnitPriceRepository extends JpaRepository<VideoTypeUnitPrice, Long>{
-    VideoTypeUnitPrice findByVideoTypeId(VideoTypeEnum videoTypeId);
+    Optional<VideoTypeUnitPrice> findByVideoTypeId(VideoTypeEnum videoTypeId);
 }

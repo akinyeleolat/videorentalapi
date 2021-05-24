@@ -65,7 +65,7 @@ public interface VideoRentService {
      * @param rentInput
      * @return
      */
-    public Double handleVideoRentalPrice(VideoRental rentInput);
+    public Double processVideoRentalPrice(VideoRental rentInput);
 
 
     /**

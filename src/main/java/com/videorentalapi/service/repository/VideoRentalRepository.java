@@ -13,5 +13,5 @@ import java.util.Optional;
  */
 @Repository
 public interface VideoRentalRepository extends JpaRepository<VideoRental, Long> {
-    VideoRental findById(long id);
+    Optional<VideoRental> findById(long id);
 }
