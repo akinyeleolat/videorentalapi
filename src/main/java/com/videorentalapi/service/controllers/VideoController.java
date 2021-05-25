@@ -89,6 +89,9 @@ public class VideoController {
     @PostMapping("/rent")
     public ResponseEntity<VideoRental> rentVideo(@Valid @RequestBody  VideoRental videoRentInput){
         User currentUser = securityService.getUser();
+        VideoRental newRental = new VideoRental();
+        newRental.setVideoId(videoRentInput.getVideoId());
+        newRental.setNumOfDays(videoRentInput.getNumOfDays());
         double rentalPrice = videoRentService.processVideoRentalPrice(videoRentInput);
         VideoRental rentedVideo = videoRentService.saveRentalInfo((int) currentUser.getId(),videoRentInput.getVideoId(),currentUser.getUsername(), rentalPrice,videoRentInput.getNumOfDays());
         return ResponseEntity.status(HttpStatus.CREATED).body(rentedVideo);

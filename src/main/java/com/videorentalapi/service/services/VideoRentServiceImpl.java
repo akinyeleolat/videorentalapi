@@ -107,5 +107,9 @@ public class VideoRentServiceImpl implements  VideoRentService {
         return videoRentalRepository.findAll(page);
     }
 
+    //TODO: let the controller be lean
+    //TODO: write test
+    // TODO: instead of switch use a factory pattern or any pattern
+
 
 }
